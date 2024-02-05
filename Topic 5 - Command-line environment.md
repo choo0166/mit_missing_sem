@@ -261,7 +261,16 @@ Here we are trying to ssh as user `foo` in server `bar.mit.edu`. The server can 
 
 ## Executing commands
 
-An often overlooked feature of `ssh` is the ability to run commands directly. `ssh foobar@server ls` will execute `ls` in the home folder of foobar. It works with pipes, so `ssh foobar@server ls | grep PATTERN` will grep locally the remote output of `ls` and `ls | ssh foobar@server grep PATTERN` will grep remotely the local output of `ls`.
+An often overlooked feature of `ssh` is the ability to run commands directly. `ssh foobar@server ls` will execute `ls` in the home folder of foobar. It works with pipes, so `ssh foobar@server ls | grep PATTERN` will grep locally the remote output of `ls` and `ls | ssh foobar@server grep PATTERN` will grep remotely the local output of `ls`. To send multiline commands, we can make use of **here documents (heredoc)** which is a special block of code that contains multiline strings that will be redirected to a command as standard input `STDIN`:
+
+```bash
+ssh foobar@server << EOF
+touch log1.txt
+touch log2.txt
+EOF
+```
+
+Heredocs are declared with the `<<`  redirection operator, followed by a delimiter token. After the delimiter token, lines of string can be defined to form the content. Finally, the delimiter token is placed at the end to serve as the termination. **The delimiter token can be any value typically "EOF" as long as it is unique enough that it won’t appear within the content**. Heredocs also support command substitutions in the content body.
 
 ## SSH Keys
 
@@ -410,7 +419,7 @@ Since you might be spending hundreds to thousands of hours in your terminal it p
 	  sleep 1
 	  done 
 	}
-```
+	```
 
 Then executing
 
